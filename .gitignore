@@ -2,3 +2,4 @@
 venv
 *.vsd
 *.sqlite3
+core/static/bower_components/
