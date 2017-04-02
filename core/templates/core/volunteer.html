@@ -1,0 +1,36 @@
+{% extends "./base.html" %}
+{% load static %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static "core/css/volunteer.css" %}">
+{% endblock head %}
+
+{% block body %}
+
+<h1>Volunteer with NWIRP</h1>
+<div class="divider"></div>
+
+<div class="card-panel" id="header">
+    You can help us defend and advance the rights of immigrants by becoming a volunteer. Here are some ways you can join our mission:
+</div>
+
+<div class="section">
+    <h2>Join our volunteer database</h2>
+    <div class="divider"></div>
+
+    <p>Register with our volunteer database to check out our current volunteer opportunities.
+    We will reach out to you within a few days of hearing from you or when we have a need for more volunteers.</p>
+
+    <a class="waves-effect waves-light btn">Register</a>
+</div>
+
+<div class="section">
+    <h2>Join our mailing list</h2>
+    <div class="divider"></div>
+    <p>To learn about other ways to be involved, please <a href="">join our mailing list</a> to receive periodic updates 
+    on how to support immigrant rights locally and nationally</p>
+</div>
+
+
+{% endblock body %}
