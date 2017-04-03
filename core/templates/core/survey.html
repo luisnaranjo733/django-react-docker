@@ -1,1 +1,46 @@
-{{ opportunities }}
+{% extends "./base.html" %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static "core/css/survey.css" %}"> {% endblock head %} {% block body %}
+
+<h1>Volunteer Survey</h1>
+<div class="divider"></div>
+
+<p style="color:red">Request method: {{ method }}</p>
+
+<p>You have indicated interest in the following volunteer opportunities:</p>
+
+<ul class="browser-default">
+    {% for opportunity in opportunity_list %}
+    <li>{{ opportunity.name }}</li>
+    {% endfor %}
+</ul>
+
+
+<form>
+    {% for survey in survey_list %}
+
+    <div class="section">
+        <h2>{{ survey.name }}</h2>
+        <!--<div class="divider"></div>-->
+
+        {% if survery.desc %}
+        <div class="card-panel">
+            {{ survey.desc }}
+        </div>
+        {% endif %}
+        
+        {% for question in survey.question_set.all %}
+        <div class="input-field col s6">
+            <input id="{{ question.id }}" type="text" class="validate">
+            <label for="{{ question.id }}">{{ question.question_text }}</label>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% endfor %}
+
+    <button class="btn waves-effect waves-light" type="submit">Submit
+    <i class="material-icons right">send</i>
+  </button>
+</form>
+{% endblock body %}
