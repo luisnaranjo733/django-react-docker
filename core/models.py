@@ -33,7 +33,7 @@ class Manager(models.Model):
     '''Model for volunteer opporunity managers
     '''
     user = models.OneToOneField(User)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15, default="", blank=True)
     role = models.CharField(max_length=100, default="", blank=True)
 
     def __str__(self):
@@ -44,9 +44,9 @@ class Opportunity(models.Model):
     '''
     name = models.CharField(max_length=255)
     desc = models.TextField(blank=True) # optional
-    volunteers = models.ManyToManyField(Volunteer)
+    volunteers = models.ManyToManyField(Volunteer, blank=True)
     manager = models.ManyToManyField(Manager)
-    surveys = models.ManyToManyField(Survey)
+    surveys = models.ManyToManyField(Survey, blank=True)
 
     def __str__(self):
         return self.name

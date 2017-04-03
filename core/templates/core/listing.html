@@ -5,28 +5,35 @@
 <div class="divider"></div>
 
 
-
 <p>
-    Select one or more volunteer categories that you are interested in. After you've selected your intestered, we ask that you
-    fill out a short survey that will help us best place you as a volunteer.
+  Select one or more volunteer categories that you are interested in. After you've selected your intestered, we ask that you
+  fill out a short survey that will help us best place you as a volunteer.
 </p>
 
-{{ opportunities }}
-
 <form action="{% url 'volunteer_survey' %}" method="POST">
-    {% csrf_token %}
+  {% csrf_token %} {% for opportunity in opportunity_list %}
+  <p>
+    <input type="checkbox" name="categories[]" value="{{ opportunity.id }}" id="{{ opportunity.id }}" />
+    <label for="{{ opportunity.id }}">{{ opportunity.name }}</label>
+  </p>
+  {% endfor %}
 
-    {% for opportunity in opportunity_list %}
-    <p>
-      <input type="checkbox" name="categories[]" value="{{ opportunity.id }}" id="{{ opportunity.id }}" />
-      <label for="{{ opportunity.id }}">{{ opportunity.name }}</label>
-    </p>
-    {% endfor %}
-
-    <button class="btn waves-effect waves-light" type="submit">Submit
+  <button class="btn waves-effect waves-light" type="submit">Submit
     <i class="material-icons right">send</i>
   </button>
 </form>
+
+
+{% for opportunity in opportunity_list %}
+<div class="section">
+  <h2>{{ opportunity.name }}</h2>
+  <div class="divider"></div>
+
+  <p>{{ opportunity.desc }}</p>
+</div>
+{% endfor %}
+
+
 
 
 {% endblock body %}
