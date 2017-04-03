@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.shortcuts import redirect
+
+def temp(request):
+    return redirect('/volunteer')
 
 urlpatterns = [
-    url(r'^', include('core.urls')),
+    url(r'^$', temp),
+    url(r'^volunteer/', include('core.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -11,24 +11,21 @@
     fill out a short survey that will help us best place you as a volunteer.
 </p>
 
-<form action="#">
+
+<form action="{% url 'volunteer_survey' %}" method="POST">
+    {% csrf_token %}
+
     <p>
-        <input type="checkbox" id="test5" />
-        <label for="test5">Take a pro bono case</label>
+      <input type="checkbox" name="categories[]" value="1" id="test5" />
+      <label for="test5">Red</label>
     </p>
+
     <p>
-        <input type="checkbox" id="test6" />
-        <label for="test6">Volunteer translators/interpreters</label>
+      <input type="checkbox" name="categories[]" value="2" id="test6" />
+      <label for="test6">blue</label>
     </p>
-    <p>
-        <input type="checkbox" id="test6" />
-        <label for="test6">Juvenile immigration cases &amp; family law cases</label>
-    </p>
-    <p>
-        <input type="checkbox" id="test6" />
-        <label for="test6">General intake volunteers</label>
-    </p>
-    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+
+    <button class="btn waves-effect waves-light" type="submit">Submit
     <i class="material-icons right">send</i>
   </button>
 </form>
