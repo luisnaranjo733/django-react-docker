@@ -11,19 +11,17 @@
     fill out a short survey that will help us best place you as a volunteer.
 </p>
 
+{{ opportunities }}
 
 <form action="{% url 'volunteer_survey' %}" method="POST">
     {% csrf_token %}
 
+    {% for opportunity in opportunity_list %}
     <p>
-      <input type="checkbox" name="categories[]" value="1" id="test5" />
-      <label for="test5">Red</label>
+      <input type="checkbox" name="categories[]" value="{{ opportunity.id }}" id="{{ opportunity.id }}" />
+      <label for="{{ opportunity.id }}">{{ opportunity.name }}</label>
     </p>
-
-    <p>
-      <input type="checkbox" name="categories[]" value="2" id="test6" />
-      <label for="test6">blue</label>
-    </p>
+    {% endfor %}
 
     <button class="btn waves-effect waves-light" type="submit">Submit
     <i class="material-icons right">send</i>
