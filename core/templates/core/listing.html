@@ -1,5 +1,5 @@
 {% extends "./base.html" %} {% load static %} {% block head %}
-<link rel="stylesheet" href="{% static " core/css/listing.css " %}"> {% endblock head %} {% block body %}
+<link rel="stylesheet" href="{% static "core/css/listing.css" %}"> {% endblock head %} {% block body %}
 
 <h1>Volunteer opportunities</h1>
 <div class="divider"></div>
@@ -11,19 +11,27 @@
     fill out a short survey that will help us best place you as a volunteer.
 </p>
 
-<form action="aye">
-    <div class="input-field col s12">
-        <select multiple>
-      <option value="0">Take a pro bono case</option>
-      <option value="1">Juvenile immigration cases &amp; family law cases</option>
-      <option value="2">General intake volunteers</option>
-      <option value="3">Volunteer translators/interpreters</option>
-    </select>
-        <label>Indicate volunteer interest</label>
-    </div>
+<form action="#">
+    <p>
+        <input type="checkbox" id="test5" />
+        <label for="test5">Take a pro bono case</label>
+    </p>
+    <p>
+        <input type="checkbox" id="test6" />
+        <label for="test6">Volunteer translators/interpreters</label>
+    </p>
+    <p>
+        <input type="checkbox" id="test6" />
+        <label for="test6">Juvenile immigration cases &amp; family law cases</label>
+    </p>
+    <p>
+        <input type="checkbox" id="test6" />
+        <label for="test6">General intake volunteers</label>
+    </p>
     <button class="btn waves-effect waves-light" type="submit" name="action">Submit
     <i class="material-icons right">send</i>
   </button>
 </form>
+
 
 {% endblock body %}
