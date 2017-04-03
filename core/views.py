@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-from core.models import Opportunity
+from core.models import Opportunity, Question
 from nwirp.settings import DEBUG
+import re
 
 def index(request):
     '''Volunteer home page
@@ -37,3 +38,14 @@ def survey(request):
 
     return render(request, 'core/survey.html', params)
     
+def done(request):
+    if request.method == 'POST':
+        for key, value in request.POST.items():
+            match = re.search('^q(\d+)$', key)
+            if match:
+                match = int(match.group(1))
+                question = get_object_or_404(Question, pk=match)
+                
+
+
+    return render(request, 'core/done.html')

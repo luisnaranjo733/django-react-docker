@@ -29,13 +29,23 @@ class Question(models.Model):
     def __str__(self):
         return f'<Question: {self.question_text}'
 
+class Manager(models.Model):
+    '''Model for volunteer opporunity managers
+    '''
+    user = models.OneToOneField(User)
+    phone = models.CharField(max_length=15)
+    role = models.CharField(max_length=100, default="", blank=True)
+
+    def __str__(self):
+        return str(self.user)
+
 class Opportunity(models.Model):
     ''' Model for each volunteer opportunity
     '''
     name = models.CharField(max_length=255)
     desc = models.TextField(blank=True) # optional
     volunteers = models.ManyToManyField(Volunteer)
-    manager = models.ManyToManyField(User)
+    manager = models.ManyToManyField(Manager)
     surveys = models.ManyToManyField(Survey)
 
     def __str__(self):

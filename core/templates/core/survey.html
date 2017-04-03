@@ -15,7 +15,9 @@
 </ul>
 
 
-<form>
+<form action="{% url 'survey_complete' %}" method="POST">
+    {% csrf_token %}
+
     {% for survey in survey_list %}
 
     <div class="section">
@@ -30,7 +32,7 @@
         
         {% for question in survey.question_set.all %}
         <div class="input-field col s6">
-            <input id="{{ question.id }}" type="text" class="validate">
+            <input id="{{ question.id }}" name="q{{ question.id }}" type="text" class="validate">
             <label for="{{ question.id }}">{{ question.question_text }}</label>
         </div>
         {% endfor %}
