@@ -39,5 +39,5 @@ class Opportunity(models.Model):
     surveys = models.ManyToManyField(Survey)
 
     def __str__(self):
-        return f'<Opportunity: {self.name}'
+        return self.name
 

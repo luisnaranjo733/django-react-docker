@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from core.models import Opportunity
 
@@ -17,8 +17,12 @@ def volunteer_listing(request):
 
 def survey(request):
     '''Volunteer interest survey page'''
+    params = {}
     if request.method == 'POST':
         choices = request.POST.getlist('categories[]')
-        print(choices)
-    return render(request, 'core/survey.html')
+        params['opportunities'] = []
+        for opportunity_id in choices:
+            params['opportunities'].append(get_object_or_404(Opportunity, pk=opportunity_id))
+
+    return render(request, 'core/survey.html', params)
     
