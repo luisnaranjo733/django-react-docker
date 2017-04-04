@@ -27,7 +27,7 @@ class Question(models.Model):
     survey = models.ForeignKey(Survey)
 
     def __str__(self):
-        return f'<Question: {self.question_text}'
+        return '<Question: %s>' % self.question_text
 
 class Manager(models.Model):
     '''Model for volunteer opporunity managers
