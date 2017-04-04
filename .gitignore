@@ -1,7 +1,7 @@
 *.pyc
 venv
 *.vsd
-*.sqlite3
+
 src/core/static/bower_components/
 ~$$NWIRP Diagram.~vsd
 *.ppk
