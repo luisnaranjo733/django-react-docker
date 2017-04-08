@@ -1,14 +1,16 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-from core.models import Opportunity, Question
+from core.models import Opportunity, Question, Manager
 from nwirp.settings import DEBUG
 import re
+
 
 def index(request):
     '''Volunteer home page
     Most likely this page won't be included in production, as NWIRP can hopefully redirect
     directly to the volunteer listing page'''
     return render(request, 'core/index.html')
+
 
 def volunteer_listing(request):
     '''Volunteer opportunity listing page'''
@@ -17,7 +19,8 @@ def volunteer_listing(request):
     }
     return render(request, 'core/listing.html', params)
 
-def survey(request):
+
+def survey_page(request):
     '''Volunteer interest survey page'''
     params = {
         'method': request.method,
@@ -33,19 +36,24 @@ def survey(request):
                 if survey not in params['survey_list']:
                     params['survey_list'].append(survey)
 
-    elif DEBUG: # load all objects on GET requests for debugging purposes
+    elif DEBUG:  # load all objects on GET requests for debugging purposes
         params['opportunity_list'] = Opportunity.objects.all()
 
     return render(request, 'core/survey.html', params)
-    
+
+
 def done(request):
     if request.method == 'POST':
         for key, value in request.POST.items():
-            match = re.search('^q(\d+)$', key)
+            match = re.search(r'^q(\d+)$', key)
             if match:
                 match = int(match.group(1))
                 question = get_object_or_404(Question, pk=match)
-                
-
 
     return render(request, 'core/done.html')
+
+
+def reach_out(request):
+    return render(request, 'core/reach_out.html', {
+        'managers': Manager.objects.all()
+    })

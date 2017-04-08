@@ -1,0 +1,22 @@
+{% extends "./base.html" %} {% load static %} {% block body %}
+
+<h1>Contacts</h1>
+
+{% for manager in managers %}
+<div class="card">
+    <div class="card-content">
+    <span class="card-title">{{ manager.user.get_full_name }}</span>
+    <p>{{ manager.role }}</p>
+    <p>{{ manager.phone }}</p>
+    <p>{{ manager.user.get_full_name }}</p>
+    <p>{{ manager.user.email }}</p>
+    </div>
+    <div class="card-action">
+    <a href="#">Phone</a>
+    <a href="#">Email</a>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock body %}

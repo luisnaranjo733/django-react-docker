@@ -19,7 +19,7 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class Question(models.Model):
     ''' Model for each survey question
     '''
@@ -42,12 +42,22 @@ class Manager(models.Model):
 class Opportunity(models.Model):
     ''' Model for each volunteer opportunity
     '''
+    class Meta:
+        verbose_name_plural = "opportunities"
+
     name = models.CharField(max_length=255)
     desc = models.TextField(blank=True) # optional
     volunteers = models.ManyToManyField(Volunteer, blank=True)
-    manager = models.ManyToManyField(Manager)
+    managers = models.ManyToManyField(Manager, blank=True)
     surveys = models.ManyToManyField(Survey, blank=True)
 
     def __str__(self):
         return self.name
 
+class Registration(models.Model):
+    '''Model for registering a volunteer for a particular opportunity's particular question
+    '''
+
+    volunteer = models.ForeignKey(Volunteer)
+    opportunity = models.ForeignKey(Opportunity)
+    question = models.ForeignKey(Question)

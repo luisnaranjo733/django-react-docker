@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import Volunteer, Survey, Question, Opportunity, Manager
+from core.models import Volunteer, Survey, Question, Opportunity, Manager, Registration
 
 class QuestionInline(admin.TabularInline):
     model = Question
@@ -12,3 +12,4 @@ admin.site.register(Volunteer)
 admin.site.register(Opportunity)
 admin.site.register(Manager)
 admin.site.register(Survey, SurveyAdmin)
+admin.site.register(Registration)
