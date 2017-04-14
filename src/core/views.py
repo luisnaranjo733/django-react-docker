@@ -1,9 +1,11 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
-from core.models import Opportunity, Question, Manager
+from django.http import HttpResponse, Http404
+from core.models import Opportunity, Question, Manager, Volunteer, Response
 from nwirp.settings import DEBUG
 import re
 
+import logging
+logger = logging.getLogger(__name__)
 
 def index(request):
     '''Volunteer home page
@@ -22,33 +24,52 @@ def volunteer_listing(request):
 
 def survey_page(request):
     '''Volunteer interest survey page'''
-    params = {
-        'method': request.method,
-    }
-    if request.method == 'POST':
-        choices = request.POST.getlist('categories[]')
-        params['opportunity_list'] = []
-        params['survey_list'] = []
-        for opportunity_id in choices:
-            opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
-            params['opportunity_list'].append(opportunity)
-            for survey in opportunity.surveys.all():
-                if survey not in params['survey_list']:
-                    params['survey_list'].append(survey)
+    params = {}
 
-    elif DEBUG:  # load all objects on GET requests for debugging purposes
-        params['opportunity_list'] = Opportunity.objects.all()
+    # if request.method != 'POST':
+    #     raise Http404
+
+    choices = request.POST.getlist('categories[]')
+    params['opportunity_list'] = []
+    params['survey_list'] = []
+    for opportunity_id in choices:
+        opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+        params['opportunity_list'].append(opportunity)
+        for survey in opportunity.surveys.all().order_by('-priority'):
+            if survey not in params['survey_list']:
+                params['survey_list'].append(survey)
+
 
     return render(request, 'core/survey.html', params)
 
 
 def done(request):
-    if request.method == 'POST':
-        for key, value in request.POST.items():
-            match = re.search(r'^q(\d+)$', key)
-            if match:
-                match = int(match.group(1))
-                question = get_object_or_404(Question, pk=match)
+    'Process a survey submission'
+    if request.method != 'POST':
+        raise Http404
+
+    volunteer_name = request.POST.get('volunteer_name', '')
+    volunteer_email = request.POST.get('volunteer_email', '')
+    volunteer_phone = request.POST.get('volunteer_phone', '')
+
+    volunteer = Volunteer()
+    volunteer.name = volunteer_name
+    volunteer.email = volunteer_email
+    volunteer.phone = volunteer_phone
+    volunteer.save()
+
+    for key, value in request.POST.items():
+        match = re.search(r'^q(\d+)$', key)
+        if match and value:
+            match = int(match.group(1))
+            question = get_object_or_404(Question, pk=match)
+
+            response = Response()
+            response.volunteer = volunteer
+            response.question = question
+            response.answer = value
+            response.save()
+
 
     return render(request, 'core/done.html')
 

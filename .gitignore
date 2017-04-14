@@ -2,7 +2,7 @@
 venv
 *.vsd
 *.sqlite3
-
+log.txt
 ~$$NWIRP Diagram.~vsd
 *.ppk
 *.pem

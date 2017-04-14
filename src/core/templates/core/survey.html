@@ -1,41 +1,65 @@
 {% extends "./base.html" %} {% load static %} {% block head %}
 <link rel="stylesheet" href="{% static "core/css/survey.css" %}"> {% endblock head %} {% block body %}
 
-<h1>Volunteer Survey</h1>
-<div class="divider"></div>
-
-<p style="color:red">Request method: {{ method }}</p>
-
-<p>You have indicated interest in the following volunteer opportunities:</p>
-
-<ul class="browser-default">
-    {% for opportunity in opportunity_list %}
-    <li>{{ opportunity.name }}</li>
-    {% endfor %}
-</ul>
-
-
 <form action="{% url 'survey_complete' %}" method="POST">
     {% csrf_token %}
+
+<div class="section">
+
+    <h1>General information</h1>
+
+    <div class="input-field col s6">
+        <input id="volunteer_name" name="volunteer_name" type="text" class="validate" required>
+        <label for="volunteer_name">Your name</label>
+    </div>
+
+    <div class="input-field col s6">
+        <input id="volunteer_email" name="volunteer_email" type="email" class="validate" required>
+        <label for="volunteer_email">Your email</label>
+    </div>
+
+    <div class="input-field col s6">
+        <input id="volunteer_phone" name="volunteer_phone" type="tel" class="validate" required>
+        <label for="volunteer_phone">Your phone</label>
+    </div>
+
+
+
+</div>
+
+
+<h1>Volunteer Surveys</h1>
+
+
 
     {% for survey in survey_list %}
 
     <div class="section">
+        {% if survey.question_set.exists %}
         <h2>{{ survey.name }}</h2>
-        <!--<div class="divider"></div>-->
 
-        {% if survery.desc %}
-        <div class="card-panel">
-            {{ survey.desc }}
-        </div>
+        {% if survey.desc %}
+        <p>{{ survey.desc }}</p>
+
         {% endif %}
         
         {% for question in survey.question_set.all %}
+
+        {% if question.required %}
+        <div class="input-field col s6">
+            <input id="{{ question.id }}" name="q{{ question.id }}" type="text" class="validate" required>
+            <label for="{{ question.id }}">*{{ question.question_text }}</label>
+        </div>
+        {% else %}
         <div class="input-field col s6">
             <input id="{{ question.id }}" name="q{{ question.id }}" type="text" class="validate">
             <label for="{{ question.id }}">{{ question.question_text }}</label>
         </div>
+        {% endif %}
+
         {% endfor %}
+
+        {% endif %}
 
     </div>
 

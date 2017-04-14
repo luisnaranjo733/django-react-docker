@@ -16,7 +16,7 @@ class Survey(models.Model):
     '''
     name = models.CharField(max_length=255)
     desc = models.TextField(blank=True) # optional
-
+    priority = models.IntegerField(default=1)
     def __str__(self):
         return self.name
 
@@ -24,10 +24,11 @@ class Question(models.Model):
     ''' Model for each survey question
     '''
     question_text = models.CharField(max_length=255)
+    required = models.BooleanField(default=False)
     survey = models.ForeignKey(Survey)
 
     def __str__(self):
-        return '<Question: %s>' % self.question_text
+        return self.question_text
 
 class Manager(models.Model):
     '''Model for volunteer opporunity managers
@@ -54,10 +55,13 @@ class Opportunity(models.Model):
     def __str__(self):
         return self.name
 
-class Registration(models.Model):
+class Response(models.Model):
     '''Model for registering a volunteer for a particular opportunity's particular question
     '''
 
     volunteer = models.ForeignKey(Volunteer)
-    opportunity = models.ForeignKey(Opportunity)
     question = models.ForeignKey(Question)
+    answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.volunteer.name}: {self.question.question_text}'
