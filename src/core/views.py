@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, Http404
 from core.models import Opportunity, Question, Manager, Volunteer, Response, Survey
 from nwirp.settings import DEBUG
@@ -36,20 +36,13 @@ def survey_page(request):
     '''
     params = {}
 
-    # if request.method != 'POST':
-    #     raise Http404
+    if request.method != 'POST':
+        return redirect('volunteer_listing')
 
     choices = request.POST.getlist('categories[]')
     opportunities = Opportunity.get_opportunities(choices)
 
     params['survey_list'] = Survey.extract_surveys(opportunities)
-
-    # for opportunity in opportunities:
-    #     for survey in opportunity.surveys.all().order_by('-priority'):
-    #         if survey not in params['survey_list']:
-    #             params['survey_list'].append(survey)
-
-
     return render(request, 'core/survey.html', params)
 
 
@@ -60,7 +53,7 @@ def done(request):
     It provides the new volunteer confirmation that they have succesfully navigated the process of signing up.
     '''
     if request.method != 'POST':
-        raise Http404
+        return redirect('volunteer_listing')
 
     volunteer_name = request.POST.get('volunteer_name', '')
     volunteer_email = request.POST.get('volunteer_email', '')

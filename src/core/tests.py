@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.test import Client
 
 from .models import Survey, Question, Opportunity, Volunteer, Manager
 
@@ -53,4 +54,17 @@ class CoreTests(TestCase):
         opportunities = Opportunity.get_opportunities(choices)
         surveys = Survey.extract_surveys(opportunities)
         self.assertEqual(len(surveys), 1)
+
+    def test_done_method(self):
+        c = Client()
+
+        nVolunteers = Volunteer.objects.count()
+
+        request = c.post('/volunteer/survey/', {
+            'volunteer_name': 'luis',
+            'volunteer_email': 'luisnaranjo733@gmail.com',
+            'volunteer_phone': '2064784652'})
+
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(Volunteer.objects.count(), nVolunteers + 1)
 

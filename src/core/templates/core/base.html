@@ -35,9 +35,8 @@
     <div class="nav-wrapper teal">
       <a href="{% url 'index' %}" class="brand-logo right">NWIRP Volunteering</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a href="{% url 'volunteer_listing' %}">Listings</a></li>
-        <li><a href="/admin">Admin</a></li>
-        <li><a href="{% url 'volunteer_survey' %}">Survey</a></li>
+        <li><a href="{% url 'volunteer_listing' %}">Volunteer opportunities</a></li>
+        {% if user.is_superuser %}<li><a href="/admin">Admin</a></li>{% endif %}
       </ul>
     </div>
   </nav>
