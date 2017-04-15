@@ -12,8 +12,8 @@
     <p>{{ manager.user.email }}</p>
     </div>
     <div class="card-action">
-    <a href="#">Phone</a>
-    <a href="#">Email</a>
+    <a href="tel:{{ manager.phone }}"><i class="fa fa-phone fa-lg" aria-hidden="true"></i></a>
+    <a href="mailto:{{ manager.user.email }}"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a>
     </div>
 </div>
 {% endfor %}

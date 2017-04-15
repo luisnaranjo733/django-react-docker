@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, Http404
-from core.models import Opportunity, Question, Manager, Volunteer, Response
+from core.models import Opportunity, Question, Manager, Volunteer, Response, Survey
 from nwirp.settings import DEBUG
 import re
 
@@ -15,7 +15,11 @@ def index(request):
 
 
 def volunteer_listing(request):
-    '''Volunteer opportunity listing page'''
+    '''Volunteer opportunity listing page
+    
+    This is where potential new volunteers can view all of the opportunities that are available.
+    They can select the opportunities that they are interested in and submit a form.
+    '''
     params = {
         'opportunity_list': Opportunity.objects.all()
     }
@@ -23,28 +27,38 @@ def volunteer_listing(request):
 
 
 def survey_page(request):
-    '''Volunteer interest survey page'''
+    '''Volunteer interest survey page
+    
+    Here potential new volunteers can fill out surveys that are required for the opportunities
+    that they expressed interest in when they filled out the form in the listing view.
+    When they submit the survey form, they will be redirected to the done view, where they
+    will get confirmation that they have applied to be a volunteer
+    '''
     params = {}
 
     # if request.method != 'POST':
     #     raise Http404
 
     choices = request.POST.getlist('categories[]')
-    params['opportunity_list'] = []
-    params['survey_list'] = []
-    for opportunity_id in choices:
-        opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
-        params['opportunity_list'].append(opportunity)
-        for survey in opportunity.surveys.all().order_by('-priority'):
-            if survey not in params['survey_list']:
-                params['survey_list'].append(survey)
+    opportunities = Opportunity.get_opportunities(choices)
+
+    params['survey_list'] = Survey.extract_surveys(opportunities)
+
+    # for opportunity in opportunities:
+    #     for survey in opportunity.surveys.all().order_by('-priority'):
+    #         if survey not in params['survey_list']:
+    #             params['survey_list'].append(survey)
 
 
     return render(request, 'core/survey.html', params)
 
 
 def done(request):
-    'Process a survey submission'
+    '''Process a survey submission
+    
+    This view proceseses a potential new volunteer's survey results and registers them as a new volunteer.
+    It provides the new volunteer confirmation that they have succesfully navigated the process of signing up.
+    '''
     if request.method != 'POST':
         raise Http404
 

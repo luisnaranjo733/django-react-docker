@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 class Volunteer(models.Model):
     ''' Model for each volunteer
@@ -17,8 +18,23 @@ class Survey(models.Model):
     name = models.CharField(max_length=255)
     desc = models.TextField(blank=True) # optional
     priority = models.IntegerField(default=1)
+
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def extract_surveys(opportunities):
+        '''Take a list of opportunities and extract all of the surveys from it
+        Doesn't return duplicate surveys although opportunities may require the same surveys
+        @param: List of opportunities
+        @returns: List of surveys
+        '''
+        surveys = []
+        for opportunity in opportunities:
+            for survey in opportunity.surveys.all().order_by('-priority'):
+                if survey not in surveys:
+                    surveys.append(survey)
+        return surveys
 
 class Question(models.Model):
     ''' Model for each survey question
@@ -54,6 +70,24 @@ class Opportunity(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_opportunities(opportunity_ids):
+        '''Fetch opportunities by pk
+        @param: List of pks
+        @returns: An array of opportunity objects
+
+        Skips any non-existing PKs silently
+        '''
+        opportunities = []
+        for opportunity_id in opportunity_ids:
+            try:
+                opportunity = Opportunity.objects.get(pk=opportunity_id)
+                opportunities.append(opportunity)
+            except Opportunity.DoesNotExist:
+                continue
+
+        return opportunities
 
 class Response(models.Model):
     '''Model for registering a volunteer for a particular opportunity's particular question
