@@ -53,6 +53,7 @@ def done(request):
     navigated the process of signing up.
     '''
     if request.method != 'POST':
+        return render(request, 'core/done.html', {'volunteer_name' : 'luis'})
         return redirect('volunteer_listing')
 
     volunteer_name = request.POST.get('volunteer_name', '')
