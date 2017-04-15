@@ -97,5 +97,5 @@ class Response(models.Model):
     question = models.ForeignKey(Question)
     answer = models.CharField(max_length=255)
 
-    def __str__(self):
-        return f'{self.volunteer.name}: {self.question.question_text}'
+    # def __str__(self):
+    #     return f'{self.volunteer.name}: {self.question.question_text}'

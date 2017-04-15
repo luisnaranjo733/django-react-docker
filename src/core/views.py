@@ -1,11 +1,10 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, Http404
-from core.models import Opportunity, Question, Manager, Volunteer, Response, Survey
-from nwirp.settings import DEBUG
 import re
 
-import logging
-logger = logging.getLogger(__name__)
+from django.shortcuts import get_object_or_404, redirect, render
+
+from core.models import (Manager, Opportunity, Question, Response, Survey,
+                         Volunteer)
+
 
 def index(request):
     '''Volunteer home page
@@ -16,7 +15,7 @@ def index(request):
 
 def volunteer_listing(request):
     '''Volunteer opportunity listing page
-    
+
     This is where potential new volunteers can view all of the opportunities that are available.
     They can select the opportunities that they are interested in and submit a form.
     '''
@@ -28,7 +27,7 @@ def volunteer_listing(request):
 
 def survey_page(request):
     '''Volunteer interest survey page
-    
+
     Here potential new volunteers can fill out surveys that are required for the opportunities
     that they expressed interest in when they filled out the form in the listing view.
     When they submit the survey form, they will be redirected to the done view, where they
@@ -48,9 +47,10 @@ def survey_page(request):
 
 def done(request):
     '''Process a survey submission
-    
-    This view proceseses a potential new volunteer's survey results and registers them as a new volunteer.
-    It provides the new volunteer confirmation that they have succesfully navigated the process of signing up.
+
+    This view proceseses a potential new volunteer's survey results and registers them
+    as a new volunteer. It provides the new volunteer confirmation that they have succesfully
+    navigated the process of signing up.
     '''
     if request.method != 'POST':
         return redirect('volunteer_listing')
@@ -65,6 +65,10 @@ def done(request):
     volunteer.phone = volunteer_phone
     volunteer.save()
 
+    params = {
+        'volunteer_name': volunteer.name
+    }
+
     for key, value in request.POST.items():
         match = re.search(r'^q(\d+)$', key)
         if match and value:
@@ -78,10 +82,11 @@ def done(request):
             response.save()
 
 
-    return render(request, 'core/done.html')
+    return render(request, 'core/done.html', params)
 
 
 def reach_out(request):
+    'This view provides contact info for the volunteer opportunity managers'
     return render(request, 'core/reach_out.html', {
         'managers': Manager.objects.all()
     })

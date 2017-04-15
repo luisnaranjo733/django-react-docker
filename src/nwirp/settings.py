@@ -29,7 +29,8 @@ ALLOWED_HOSTS = [
     'ec2-54-218-9-42.us-west-2.compute.amazonaws.com',
     'localhost',
     'web',
-    '127.0.0.1'
+    '127.0.0.1',
+    'testserver'
 ]
 
 
