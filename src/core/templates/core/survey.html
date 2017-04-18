@@ -30,6 +30,7 @@
 </div>
 
 
+{% if survey_list %}
 <h2>Volunteer Surveys</h1>
 
 
@@ -66,6 +67,7 @@
     </div>
 
     {% endfor %}
+{% endif %}
 
     <button class="btn waves-effect waves-light" type="submit">Submit
     <i class="material-icons right">send</i>
