@@ -58,7 +58,20 @@ class Manager(models.Model):
 
 class Opportunity(models.Model):
     ''' Model for each volunteer opportunity
+
+    Opportunity types are mutually exclusive.
+    This opportunity type should not be available
+    in the django admin page.
+
+    Types
+    =====
+    * Survey-able (default)
+    * Action-able
     '''
+
+    OPPORTUNITY_TYPE_SURVEYABLE = 'Survey-able'
+    OPPORTUNITY_TYPE_ACTIONABLE = 'Action-able'
+
     class Meta:
         verbose_name_plural = "opportunities"
 
@@ -66,7 +79,19 @@ class Opportunity(models.Model):
     desc = models.TextField(blank=True) # optional
     volunteers = models.ManyToManyField(Volunteer, blank=True)
     managers = models.ManyToManyField(Manager, blank=True)
-    surveys = models.ManyToManyField(Survey, blank=True)
+    surveys = models.ManyToManyField(Survey, blank=True,
+                                     help_text='Surveys for Action-able \
+                                     opportunities will not be issued to \
+                                     potential new volunteers. ')
+
+    opportunity_type = models.CharField(max_length=32, default=OPPORTUNITY_TYPE_SURVEYABLE,
+                                        choices=(
+                                            (OPPORTUNITY_TYPE_ACTIONABLE, \
+                                                OPPORTUNITY_TYPE_ACTIONABLE),
+                                            (OPPORTUNITY_TYPE_SURVEYABLE, \
+                                                OPPORTUNITY_TYPE_SURVEYABLE),
+                                        )
+                                       )
 
     def __str__(self):
         return self.name

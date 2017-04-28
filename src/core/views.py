@@ -42,6 +42,7 @@ def survey_page(request):
     opportunities = Opportunity.get_opportunities(choices)
 
     params['survey_list'] = Survey.extract_surveys(opportunities)
+    params['opportunity_list'] = map(lambda opportunity: opportunity.pk, opportunities)
     return render(request, 'core/survey.html', params)
 
 

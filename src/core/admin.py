@@ -25,8 +25,11 @@ class ResponseAdmin(admin.ModelAdmin):
     search_fields = ['volunteer__name', 'question__question_text']
     list_filter = ('volunteer', 'question')
 
+class OpportunityAdmin(admin.ModelAdmin):
+    list_display = ('name', 'opportunity_type')
+
 admin.site.register(Volunteer, VolunteerAdmin)
-admin.site.register(Opportunity)
+admin.site.register(Opportunity, OpportunityAdmin)
 admin.site.register(Manager, ManagerAdmin)
 admin.site.register(Survey, SurveyAdmin)
 admin.site.register(Response, ResponseAdmin)
