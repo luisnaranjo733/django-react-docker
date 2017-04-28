@@ -86,8 +86,10 @@ class Opportunity(models.Model):
     OPPORTUNITY_TYPE_SURVEYABLE = 'Survey-able'
     OPPORTUNITY_TYPE_ACTIONABLE = 'Action-able'
 
-    ACTIONABLE_ONLY_HELP_TEXT = 'This field is only applicable to %s opportunities' % OPPORTUNITY_TYPE_ACTIONABLE
-    SURVEYABLE_ONLY_HELP_TEXT = 'This field is only applicable to %s opportunities' % OPPORTUNITY_TYPE_SURVEYABLE
+    ACTIONABLE_ONLY_HELP_TEXT = 'This field is only applicable to %s opportunities' \
+                                 % OPPORTUNITY_TYPE_ACTIONABLE
+    SURVEYABLE_ONLY_HELP_TEXT = 'This field is only applicable to %s opportunities' \
+                                 % OPPORTUNITY_TYPE_SURVEYABLE
 
     class Meta:
         verbose_name_plural = "opportunities"
@@ -143,6 +145,12 @@ class Response(models.Model):
     volunteer = models.ForeignKey(Volunteer)
     question = models.ForeignKey(Question)
     answer = models.CharField(max_length=255)
+    timestamp = models.DateTimeField("Response received", auto_now_add=True) # timestamp on response created
 
     def __str__(self):
         return '%s: %s' % (self.volunteer.name, self.question.question_text)
+
+    # def get_absolute_url(self):
+    #     return reverse('volunteer_listing')
+
+

@@ -25,7 +25,8 @@ class ManagerAdmin(admin.ModelAdmin):
 
 class ResponseAdmin(admin.ModelAdmin):
     search_fields = ['volunteer__name', 'question__question_text']
-    list_filter = ('volunteer', 'question')
+    list_filter = ('volunteer', 'question', 'timestamp')
+    list_display = ('question', 'volunteer', 'timestamp', 'answer')
 
 class OpportunityAdmin(admin.ModelAdmin):
     list_display = ('name', 'opportunity_type')

@@ -33,7 +33,7 @@
 <div class="navbar-fixed">
   <nav>
     <div class="nav-wrapper teal">
-      <a href="{% url 'index' %}" class="brand-logo center">NWIRP Volunteering</a>
+      <a href="{% url 'volunteer_listing' %}" class="brand-logo center">NWIRP Volunteering</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <!--<li><a href="{% url 'volunteer_listing' %}">Volunteer opportunities</a></li>-->
         {% if user.is_superuser %}<li><a href="/admin">Admin</a></li>{% endif %}
