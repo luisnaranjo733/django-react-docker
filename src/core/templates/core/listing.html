@@ -41,13 +41,23 @@
   <h2>Step 2: Select your interest</h2>
   <div class="indent">
     <form action="{% url 'volunteer_survey' %}" method="POST">
+      <div class='indent'>
       {% csrf_token %} {% for opportunity in opportunity_list %}
+      
+      {% if opportunity.opportunity_type == "Survey-able" %}
       <p>
         <input type="checkbox" name="categories[]" value="{{ opportunity.id }}" id="{{ opportunity.id }}" />
         <label for="{{ opportunity.id }}">{{ opportunity.name }}</label>
       </p>
-      {% endfor %}
+      {% elif opportunity.opportunity_type == "Action-able" %}
+      <button class="waves-effect waves-light btn-flat grey lighten-2 action-btn"><span class="black-text">Action</span></button>
+      {% endif %}
 
+      
+      {% endfor %}
+      </div>
+
+      <br />
       <button class="btn waves-effect waves-light" type="submit">Proceed to step 3
     <i class="material-icons right">send</i>
   </button>
