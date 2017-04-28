@@ -86,8 +86,8 @@ class Opportunity(models.Model):
     OPPORTUNITY_TYPE_SURVEYABLE = 'Survey-able'
     OPPORTUNITY_TYPE_ACTIONABLE = 'Action-able'
 
-    ACTIONABLE_ONLY_HELP_TEXT = f'This field is only applicable to {OPPORTUNITY_TYPE_ACTIONABLE} opportunities'
-    SURVEYABLE_ONLY_HELP_TEXT = f'This field is only applicable to {OPPORTUNITY_TYPE_SURVEYABLE} opportunities'
+    ACTIONABLE_ONLY_HELP_TEXT = 'This field is only applicable to %s opportunities' % OPPORTUNITY_TYPE_ACTIONABLE
+    SURVEYABLE_ONLY_HELP_TEXT = 'This field is only applicable to %s opportunities' % OPPORTUNITY_TYPE_SURVEYABLE
 
     class Meta:
         verbose_name_plural = "opportunities"
@@ -145,4 +145,4 @@ class Response(models.Model):
     answer = models.CharField(max_length=255)
 
     def __str__(self):
-        return f'{self.volunteer.name}: {self.question.question_text}'
+        return '%s: %s' % (self.volunteer.name, self.question.question_text)
