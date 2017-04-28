@@ -18,10 +18,23 @@ class Survey(models.Model):
     '''
     name = models.CharField(max_length=255)
     desc = models.TextField(blank=True) # optional
-    priority = models.IntegerField(default=1)
+    priority = models.IntegerField(default=1,
+                                   help_text='This integer value represents the order \
+                                   in which surveys appear to potential new volunteers.')
 
     def __str__(self):
         return self.name
+
+    def get_dependencies(self):
+        '''Get the opportunities
+        that require this survey'''
+        return Opportunity.objects.filter(surveys=self)
+
+    def count_dependencies(self):
+        '''Count the number of opportunities
+        that require this survey'''
+        return self.get_dependencies().count()
+    count_dependencies.short_description = '# of opportunities that require this survey'
 
     @staticmethod
     def extract_surveys(opportunities):
@@ -128,5 +141,5 @@ class Response(models.Model):
     question = models.ForeignKey(Question)
     answer = models.CharField(max_length=255)
 
-    # def __str__(self):
-    #     return f'{self.volunteer.name}: {self.question.question_text}'
+    def __str__(self):
+        return f'{self.volunteer.name}: {self.question.question_text}'

@@ -7,6 +7,8 @@ class QuestionInline(admin.TabularInline):
 
 class SurveyAdmin(admin.ModelAdmin):
     inlines = [QuestionInline]
+    list_display = ('name', 'count_dependencies')
+    # ordering = ('-count_dependencies',)
 
 class ResponseInline(admin.TabularInline):
     model = Response
@@ -27,6 +29,12 @@ class ResponseAdmin(admin.ModelAdmin):
 
 class OpportunityAdmin(admin.ModelAdmin):
     list_display = ('name', 'opportunity_type')
+    list_filter = (
+        'managers', 'surveys'
+    )
+    search_fields = [
+        'name', 'desc', 'volunteers__name'
+    ]
 
 admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Opportunity, OpportunityAdmin)

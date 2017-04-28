@@ -134,4 +134,19 @@ class CoreTests(TestCase):
         # test that a volunteer was added
         self.assertEqual(Response.objects.count(), n_responses + 1)
 
+    def test_survey_get_dependencies(self):
+        '''Test survey get_dependencies method'''
+        opportunity = Opportunity.objects.get(pk=1)
+        survey = Survey.objects.get(pk=1)
+
+        self.assertEqual(list(survey.get_dependencies()), [
+            opportunity
+        ])
+
+    def test_survey_count_dependencies(self):
+        '''Test survey count_dependencies method'''
+        survey = Survey.objects.get(pk=1)
+
+        self.assertEqual(survey.count_dependencies(), 1)
+
 
