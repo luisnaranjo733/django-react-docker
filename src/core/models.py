@@ -86,6 +86,9 @@ class Opportunity(models.Model):
     OPPORTUNITY_TYPE_SURVEYABLE = 'Survey-able'
     OPPORTUNITY_TYPE_ACTIONABLE = 'Action-able'
 
+    ACTIONABLE_ONLY_HELP_TEXT = f'This field is only applicable to {OPPORTUNITY_TYPE_ACTIONABLE} opportunities'
+    SURVEYABLE_ONLY_HELP_TEXT = f'This field is only applicable to {OPPORTUNITY_TYPE_SURVEYABLE} opportunities'
+
     class Meta:
         verbose_name_plural = "opportunities"
 
@@ -94,9 +97,7 @@ class Opportunity(models.Model):
     volunteers = models.ManyToManyField(Volunteer, blank=True)
     managers = models.ManyToManyField(Manager, blank=True)
     surveys = models.ManyToManyField(Survey, blank=True,
-                                     help_text='Surveys for Action-able \
-                                     opportunities will not be issued to \
-                                     potential new volunteers. ')
+                                     help_text=SURVEYABLE_ONLY_HELP_TEXT)
 
     opportunity_type = models.CharField(max_length=32, default=OPPORTUNITY_TYPE_SURVEYABLE,
                                         choices=(
@@ -106,8 +107,10 @@ class Opportunity(models.Model):
                                                 OPPORTUNITY_TYPE_SURVEYABLE),
                                         )
                                        )
-    action_text = models.CharField(max_length=255, default='', blank=True)
-    action_link = models.CharField(max_length=255, default='', blank=True)
+    action_text = models.CharField(max_length=255, default='', blank=True,
+                                   help_text=ACTIONABLE_ONLY_HELP_TEXT)
+    action_link = models.CharField(max_length=255, default='', blank=True,
+                                   help_text=ACTIONABLE_ONLY_HELP_TEXT)
 
     def __str__(self):
         return self.name
