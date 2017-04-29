@@ -92,3 +92,9 @@ def reach_out(request):
     return render(request, 'core/reach_out.html', {
         'managers': Manager.objects.all()
     })
+
+
+def results_endpoint(request):
+    return render(request, 'core/reach_out.html', {
+        'managers': Manager.objects.all()
+    })
