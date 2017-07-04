@@ -10,7 +10,8 @@ def index(request):
     '''Volunteer home page
     Most likely this page won't be included in production, as NWIRP can hopefully redirect
     directly to the volunteer listing page'''
-    return render(request, 'core/index.html')
+    return render(request, 'core/react.html')
+    # return render(request, 'core/index.html')
 
 
 def volunteer_listing(request):

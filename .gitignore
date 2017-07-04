@@ -6,3 +6,4 @@ log.txt
 ~$$NWIRP Diagram.~vsd
 *.ppk
 *.pem
+src/node_modules/
