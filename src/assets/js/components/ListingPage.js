@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import './listing.css';
+
+const Header = () => (
+  <h1>ListingPage</h1>
+);
 
 class ListingPage extends Component {
   render() {
     return (
-        <h2>The real listing page</h2>
+      <div>
+        <Header />
+
+      </div>
     );
   }
 }
