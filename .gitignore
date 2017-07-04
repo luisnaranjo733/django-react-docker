@@ -7,3 +7,5 @@ log.txt
 *.ppk
 *.pem
 src/node_modules/
+src/assets/bundles/*
+npm-debug.log

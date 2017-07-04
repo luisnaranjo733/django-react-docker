@@ -5,7 +5,8 @@ var Hello = React.createClass ({
     render: function() {
         return (
             <h1>
-            Hello, React!
+            Hello, React!!
+            <a href="www.google.com">Link</a>
             </h1>
         )
     }
