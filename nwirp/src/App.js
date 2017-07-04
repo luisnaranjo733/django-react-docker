@@ -4,7 +4,7 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import './index.css';
+import './css/index.css';
 import ListingPage from './components/ListingPage'
 import SurveyPage from './components/SurveyPage'
 import ConfirmationPage from './components/ConfirmationPage'
