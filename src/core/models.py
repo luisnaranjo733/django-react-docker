@@ -120,6 +120,9 @@ class Opportunity(models.Model):
     def get_absolute_url(self):
         return reverse('volunteer_listing')
 
+    def get_volunteers(self):
+        return []
+
     @staticmethod
     def get_opportunities(opportunity_ids):
         '''Fetch opportunities by pk
@@ -138,14 +141,15 @@ class Opportunity(models.Model):
 
         return opportunities
 
-class Response(models.Model):
+class QuestionResponse(models.Model):
     '''Model for registering a volunteer for a particular opportunity's particular question
     '''
 
     volunteer = models.ForeignKey(Volunteer)
     question = models.ForeignKey(Question)
     answer = models.CharField(max_length=255)
-    timestamp = models.DateTimeField("Response received", auto_now_add=True) # timestamp on response created
+    timestamp = models.DateTimeField("Response received", \
+                                     auto_now_add=True) # timestamp on response created
 
     def __str__(self):
         return '%s: %s' % (self.volunteer.name, self.question.question_text)

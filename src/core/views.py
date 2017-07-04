@@ -2,7 +2,13 @@ import re
 
 from django.shortcuts import get_object_or_404, redirect, render
 
-from core.models import (Manager, Opportunity, Question, Response, Survey,
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.renderers import JSONRenderer
+
+from core.serializers import OpportunitySerializer
+from core.models import (Manager, Opportunity, Question, QuestionResponse, Survey,
                          Volunteer)
 
 
@@ -77,7 +83,7 @@ def done(request):
             match = int(match.group(1))
             question = get_object_or_404(Question, pk=match)
 
-            response = Response()
+            response = QuestionResponse()
             response.volunteer = volunteer
             response.question = question
             response.answer = value
@@ -98,3 +104,31 @@ def results_endpoint(request):
     return render(request, 'core/reach_out.html', {
         'managers': Manager.objects.all()
     })
+
+class ResultsEndpoint(APIView):
+    '''Results endpoint
+    '''
+
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        json = {'responses': []}
+        opportunities = Opportunity.objects.all()
+        for opportunity in opportunities:
+            # print(opportunity.surveys)
+            for volunteer in opportunity.volunteers.all():
+                print(volunteer)
+                for survey in opportunity.surveys.all():
+                    questions = survey.question_set.all()
+                    for question in questions:
+                        response = question.questionresponse_set.filter(volunteer=volunteer)
+                        json['responses'].append({
+                            'volunteer': volunteer.name,
+                            'opportunity': opportunity.name,
+                            'survey': survey.name,
+                            'question': question.question_text,
+                            'response': response.answer
+                        })
+
+        return Response(json)
+        
