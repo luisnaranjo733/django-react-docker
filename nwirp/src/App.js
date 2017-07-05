@@ -11,7 +11,10 @@ import ConfirmationPage from './components/ConfirmationPage'
 
 const App = () => (
   <Router>
-    <Route exact path="/" component={ListingPage}/>
+    <div>
+      <Route exact path="/" component={ListingPage}/>
+      <Route path="/Survey" component={SurveyPage}/>
+    </div>
   </Router>
 )
 export default App
