@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { setOpportunityPreferences, setOpportunities } from '../redux'
 
 import 'whatwg-fetch'
+import $ from "jquery";
 
 import '../css/listing.css';
 
@@ -105,8 +106,8 @@ const ActionableOpportunity = (props) => (
 
 const SurveyableOpportunity = (props) => (
   <p>
-    <input type="checkbox" name="categories[]" value={props.opportunity.id} id={props.opportunity.id} />
-    <label htmlFor={props.opportunity.id}>{props.opportunity.name}</label>
+    <input type="checkbox" name="categories[]" value={"o"+props.opportunity.id} id={"o"+props.opportunity.id} />
+    <label htmlFor={"o"+props.opportunity.id}>{props.opportunity.name}</label>
   </p>
 );
 
@@ -162,9 +163,15 @@ class ListingPage extends Component {
   }
 
   buttonPressed = () => {
-
-    this.props.dispatch(setOpportunityPreferences([1, 2, 3, 4]));
-    // this.props.history.push('/Survey');
+    let preferences = [];
+    this.props.opportunities.forEach(opportunity => {
+      let is_opportunity_checked = $(`#o${opportunity.id}`).is(":checked");
+      if (is_opportunity_checked) {
+        preferences.push(opportunity.id);
+      }
+    });
+    this.props.dispatch(setOpportunityPreferences(preferences));
+    this.props.history.push('/Survey');
   }
 
   render() {
