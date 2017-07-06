@@ -6,6 +6,8 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { setOpportunityPreferences } from '../redux'
 
+import 'whatwg-fetch'
+
 import '../css/listing.css';
 
 let OPPORTUNITIES = [
@@ -141,6 +143,19 @@ class ListingPage extends Component {
   componentWillMount() {
     // TODO:
     // fetch opportunities from backend via api
+
+    let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/volunteer/api/opportunities/?format=json';
+
+    fetch(url, {
+      credentials: 'include'
+    })
+      .then(function (response) {
+        return response.text();
+      })
+      .then(function (json) {
+        console.log(json);
+      });
+
     // then set them in state
     this.state = {
       opportunities: OPPORTUNITIES
@@ -148,8 +163,8 @@ class ListingPage extends Component {
   }
 
   buttonPressed = () => {
-    
-    this.props.dispatch(setOpportunityPreferences([1,2,3,4]));
+
+    this.props.dispatch(setOpportunityPreferences([1, 2, 3, 4]));
     console.log(this.props);
     // this.props.history.push('/Survey');
   }
