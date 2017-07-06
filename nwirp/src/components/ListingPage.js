@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {
   Link
 } from 'react-router-dom'
+import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+import { setOpportunityPreferences } from '../redux'
 
 import '../css/listing.css';
 
@@ -121,9 +124,9 @@ class OpportunityInterestList extends Component {
           ))}
 
           <br />
-          <Link to="/Survey" className="btn waves-effect waves-light">Proceed to step 3
+          <button className="btn waves-effect waves-light" onClick={this.props.buttonPressed}>Proceed to step 3
             <i className="material-icons right">send</i>
-          </Link>
+          </button>
         </div>
       </div>
     );
@@ -145,7 +148,9 @@ class ListingPage extends Component {
   }
 
   buttonPressed = () => {
-
+    console.log(this.props);
+    this.props.dispatch(setOpportunityPreferences([1,2,3,4]));
+    this.props.history.push('/Survey');
   }
 
   render() {
@@ -159,4 +164,11 @@ class ListingPage extends Component {
   }
 }
 
-export default ListingPage;
+function mapStateToProps(state) {
+  return {
+    opportunity_ids: state.opportunity_ids,
+  }
+}
+
+
+export default connect(mapStateToProps)(ListingPage);
