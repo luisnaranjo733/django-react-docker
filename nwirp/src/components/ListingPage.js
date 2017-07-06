@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { setOpportunityPreferences } from '../redux'
+import { setOpportunityPreferences, setOpportunities } from '../redux'
 
 import 'whatwg-fetch'
 
@@ -70,16 +70,17 @@ const Header = () => (
 
 const OpportunityDescription = ({ opportunity }) => (
   <div>
-    <h3>{opportunity.title}</h3>
+    <h3>{opportunity.name}</h3>
     <div className="divider"></div>
 
-    <p>{opportunity.description}</p>
+    <p>{opportunity.desc}</p>
   </div>
 );
 
 class OpportunityDescriptionList extends Component {
 
   render() {
+    console.log(this.props.opportunities);
     return (
       <div className="section">
         <h2>Step 1: Read about available opportunities</h2>
@@ -97,22 +98,22 @@ class OpportunityDescriptionList extends Component {
 
 const ActionableOpportunity = (props) => (
   <a className="waves-effect waves-light btn-flat grey lighten-2 action-btn" data-modal-id="{{ opportunity.id }}"
-    href={props.opportunity.url}>
-    <span className="black-text">{props.opportunity.title}</span>
+    href={props.opportunity.action_link}>
+    <span className="black-text">{props.opportunity.name}</span>
   </a>
 );
 
 const SurveyableOpportunity = (props) => (
   <p>
     <input type="checkbox" name="categories[]" value={props.opportunity.id} id={props.opportunity.id} />
-    <label htmlFor={props.opportunity.id}>{props.opportunity.title}</label>
+    <label htmlFor={props.opportunity.id}>{props.opportunity.name}</label>
   </p>
 );
 
 class OpportunityInterestList extends Component {
   render() {
-    let surveyable_opportunities = this.props.opportunities.filter(opportunity => opportunity.type == 'survey-able');
-    let actionable_opportunities = this.props.opportunities.filter(opportunity => opportunity.type == 'action-able');
+    let surveyable_opportunities = this.props.opportunities.filter(opportunity => opportunity.opportunity_type == 'Survey-able');
+    let actionable_opportunities = this.props.opportunities.filter(opportunity => opportunity.opportunity_type == 'Action-able');
 
     return (
       <div className="section">
@@ -138,34 +139,31 @@ class OpportunityInterestList extends Component {
 class ListingPage extends Component {
   constructor() {
     super();
+      this.state = {
+        opportunities: []
+      }
   }
 
-  componentWillMount() {
-    // TODO:
+  componentDidMount() {
     // fetch opportunities from backend via api
-
     let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/volunteer/api/opportunities/?format=json';
 
-    fetch(url, {
-      credentials: 'include'
-    })
+    let outerThis = this;
+    fetch(url)
       .then(function (response) {
         return response.text();
       })
-      .then(function (json) {
-        console.log(json);
-      });
+      .then(function (opportunities) {
+        opportunities = JSON.parse(opportunities);
 
-    // then set them in state
-    this.state = {
-      opportunities: OPPORTUNITIES
-    }
+        // then set them in state
+        outerThis.props.dispatch(setOpportunities(opportunities));
+      });
   }
 
   buttonPressed = () => {
 
     this.props.dispatch(setOpportunityPreferences([1, 2, 3, 4]));
-    console.log(this.props);
     // this.props.history.push('/Survey');
   }
 
@@ -173,8 +171,8 @@ class ListingPage extends Component {
     return (
       <div className="container">
         <Header />
-        <OpportunityDescriptionList opportunities={this.state.opportunities} />
-        <OpportunityInterestList opportunities={this.state.opportunities} buttonPressed={this.buttonPressed} />
+        <OpportunityDescriptionList opportunities={this.props.opportunities} />
+        <OpportunityInterestList opportunities={this.props.opportunities} buttonPressed={this.buttonPressed} />
       </div>
     );
   }
@@ -182,6 +180,7 @@ class ListingPage extends Component {
 
 function mapStateToProps(state) {
   return {
+    opportunities: state.opportunities,
     opportunity_preference_ids: state.opportunity_preference_ids,
   }
 }

@@ -1,5 +1,12 @@
 // actions
 
+export const setOpportunities = opportunities => {
+    return {
+        type: 'SET_OPPORTUNITIES',
+        opportunities
+    }
+}
+
 export const setOpportunityPreferences = opportunity_ids => {
     return {
         type: 'SET_OPPORTUNITY_PREFERENCE_IDS',
@@ -11,16 +18,19 @@ export const setOpportunityPreferences = opportunity_ids => {
 // reducers
 
 let initialState = {
+    opportunities: [],
     opportunity_preference_ids: []
 };
 
 const reducer = (state = initialState, action) => {
-    let new_opportunity_preference_ids = Object.assign([], state.opportunity_preference_ids);
+    let new_state = Object.assign({}, state);
     switch (action.type) {
         case 'SET_OPPORTUNITY_PREFERENCE_IDS':
-            return {
-                opportunity_preference_ids: action.opportunity_ids
-            };
+            new_state.opportunity_preference_ids = action.opportunity_preference_ids;
+            return new_state;
+        case 'SET_OPPORTUNITIES':
+            new_state.opportunities = action.opportunities;
+            return new_state;
         default:
             return state
     }
