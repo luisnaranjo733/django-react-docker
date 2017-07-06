@@ -148,9 +148,10 @@ class ListingPage extends Component {
   }
 
   buttonPressed = () => {
-    console.log(this.props);
+    
     this.props.dispatch(setOpportunityPreferences([1,2,3,4]));
-    this.props.history.push('/Survey');
+    console.log(this.props);
+    // this.props.history.push('/Survey');
   }
 
   render() {
@@ -166,7 +167,7 @@ class ListingPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    opportunity_ids: state.opportunity_ids,
+    opportunity_preference_ids: state.opportunity_preference_ids,
   }
 }
 
