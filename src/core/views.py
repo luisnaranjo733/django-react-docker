@@ -2,9 +2,15 @@ import re
 
 from django.shortcuts import get_object_or_404, redirect, render
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response as DRF_Response
+from rest_framework.views import APIView
+
 from core.models import (Manager, Opportunity, Question, Response, Survey,
                          Volunteer)
-
+from core import serializers
 
 def index(request):
     '''Volunteer home page
@@ -12,6 +18,18 @@ def index(request):
     directly to the volunteer listing page'''
     return render(request, 'core/react.html')
     # return render(request, 'core/index.html')
+
+class OpportunityList(APIView):
+    '''
+    List all opportunities
+    '''
+
+    # renderer_classes = (JSONRenderer, )
+
+    def get(self, request, format=None):
+        opportunities = Opportunity.objects.all()
+        serializer = serializers.OpportunitySerializer(opportunities, many=True)
+        return DRF_Response(serializer.data)
 
 
 def volunteer_listing(request):
