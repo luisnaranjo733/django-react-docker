@@ -1,8 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+var React = require('react')
+var ReactDOM = require('react-dom')
 
-ReactDOM.render(<App />, document.getElementById('container'));
-registerServiceWorker();
+var Hello = React.createClass ({
+    render: function() {
+        return (
+            <h1>
+            Hello, React!!
+            <a href="www.google.com">Link</a>
+            </h1>
+        )
+    }
+})
+
+ReactDOM.render(<Hello />, document.getElementById('container'))
