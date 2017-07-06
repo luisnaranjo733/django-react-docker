@@ -147,7 +147,7 @@ class ListingPage extends Component {
 
   componentDidMount() {
     // fetch opportunities from backend via api
-    let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/volunteer/api/opportunities/?format=json';
+    let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/api/opportunities/?format=json';
 
     let outerThis = this;
     fetch(url)

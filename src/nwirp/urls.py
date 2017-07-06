@@ -21,6 +21,6 @@ def temp(request):
     return redirect('/volunteer')
 
 urlpatterns = [
-    url(r'^$', include('core.urls')),
+    url(r'^', include('core.urls')),
     url(r'^admin/', admin.site.urls),
 ]
