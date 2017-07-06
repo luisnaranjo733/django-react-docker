@@ -20,8 +20,6 @@ let store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-console.log('also in the app');
-
 const App = () => (
   <Provider store={store}>
     <Router>

@@ -139,7 +139,6 @@ class OpportunityInterestList extends Component {
 
 class ListingPage extends Component {
   constructor() {
-    console.log('also out here');
     super();
       this.state = {
         opportunities: []
@@ -148,8 +147,8 @@ class ListingPage extends Component {
 
   componentDidMount() {
     // fetch opportunities from backend via api
-    let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/volunteer/api/opportunities/?format=json';
-    console.log(url);
+    let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/api/opportunities/?format=json';
+
     let outerThis = this;
     fetch(url)
       .then(function (response) {
