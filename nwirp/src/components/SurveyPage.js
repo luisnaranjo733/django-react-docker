@@ -21,6 +21,7 @@ class GeneralInformation extends Component {
     const name = target.name;
 
     this.props.setResponseParent(name, value);
+    this.forceUpdate();
   }
 
   render() {
