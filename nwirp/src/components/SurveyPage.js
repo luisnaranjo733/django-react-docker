@@ -90,6 +90,11 @@ class SurveyList extends Component {
 class SurveyPage extends Component {
   constructor() {
     super();
+    this.state = {
+      responses: {
+
+      }
+    };
   }
 
   componentDidMount() {
@@ -113,19 +118,22 @@ class SurveyPage extends Component {
       });
   }
 
-  submitButtonPressed = () => {
-    alert('pressed');
+  submitButtonPressed = (e) => {
+    e.preventDefault();
+    console.log('pressed');
   }
 
   render() {
     return (
       <div className="container">
         <Header />
-        <GeneralInformation />
-        <SurveyList surveys={this.props.surveys} />
-        <button className="btn waves-effect waves-light" onClick={this.submitButtonPressed}>Submit
-          <i className="material-icons right">send</i>
-        </button>
+        <form onSubmit={this.submitButtonPressed}>
+          <GeneralInformation />
+          <SurveyList surveys={this.props.surveys} responses={this.state.responses} />
+          <button className="btn waves-effect waves-light">Submit
+            <i className="material-icons right">send</i>
+          </button>
+        </form>
       </div>
     );
   }
