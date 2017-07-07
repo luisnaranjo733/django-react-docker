@@ -26,7 +26,6 @@ class InputComponent extends Component {
 class GeneralInformation extends InputComponent {
 
   render() {
-    console.log('rendering general information');
     return (
       <div>
         <h2>General information</h2>
@@ -55,18 +54,19 @@ class GeneralInformation extends InputComponent {
 class QuestionItem extends InputComponent {
 
   render() {
+    let question_id = `q${this.props.question.id}`;
     return (
       <div className="input-field col s6">
         {this.props.question.required &&
           <span>
-            <input id={this.props.question.id} name={`q${this.props.question.id}`} type="text" className="validate" required></input>
+            <input id={question_id} name={question_id} value={this.props.responses[question_id]} onChange={this.handleInputChange} type="text" className="validate" required></input>
             <label htmlFor={this.props.question.id}>*{this.props.question.question_text}</label>
           </span>
         }
 
         {!this.props.question.required &&
           <span>
-            <input id={this.props.question.id} name={`q${this.props.question.id}`} type="text" className="validate"></input>
+            <input id={question_id} name={question_id} value={this.props.responses[question_id]} onChange={this.handleInputChange} type="text" className="validate"></input>
             <label htmlFor={this.props.question.id}>{this.props.question.question_text}</label>
           </span>
         }
@@ -82,24 +82,25 @@ const SurveyItem = (props) => (
     <h3>{props.survey.name}</h3>
     <p>{props.survey.desc}</p>
     {props.survey.question_set.map((question, index) => (
-      <QuestionItem key={index} question={question} />
+      <QuestionItem key={index} question={question} responses={props.responses} setResponseParent={props.setResponseParent} />
     ))}
 
   </div>
 );
 
-const Test = () => (
-  <h1>TEST</h1>
-);
 
 class SurveyList extends Component {
   render() {
-    console.log(this.props.surveys);
+    this.props.surveys.forEach(survey => {
+      survey.question_set.forEach(question => {
+        this.props.setResponseParent(`q${question.id}`, '');
+      })
+    })
     return (
       <div>
         <h2>Volunteer Surveys</h2>
         {this.props.surveys.map((survey, index) => (
-          <SurveyItem key={index} survey={survey} />
+          <SurveyItem key={index} survey={survey} responses={this.props.responses} setResponseParent={this.props.setResponseParent}/>
         ))}
       </div>
     );
@@ -140,15 +141,11 @@ class SurveyPage extends Component {
 
   submitButtonPressed = (e) => {
     e.preventDefault();
-    console.log('pressed');
   }
 
 
   setResponseParent = (name, value) => {
-    console.log(`name: ${name} | value: ${value}`);
-    console.log(this.props.responses);
     this.props.dispatch(setResponse(name, value));
-    console.log(this.props.responses);
   }
 
   render() {
@@ -157,7 +154,7 @@ class SurveyPage extends Component {
         <Header />
         <form onSubmit={this.submitButtonPressed}>
           <GeneralInformation responses={this.props.responses} setResponseParent={this.setResponseParent} />
-          <SurveyList surveys={this.props.surveys} />
+          <SurveyList responses={this.props.responses} setResponseParent={this.setResponseParent} surveys={this.props.surveys} />
           <button className="btn waves-effect waves-light">Submit
             <i className="material-icons right">send</i>
           </button>

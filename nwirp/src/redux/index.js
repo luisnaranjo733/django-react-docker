@@ -37,7 +37,7 @@ let initialState = {
     opportunity_preference_ids: [],
     surveys: [],
     responses: {
-        volunteer_name: 'yo',
+        volunteer_name: '',
         volunteer_email: '',
         volunteer_phone: ''
     }
