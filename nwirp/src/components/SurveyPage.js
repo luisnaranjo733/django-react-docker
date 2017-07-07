@@ -12,9 +12,7 @@ const Header = () => (
   </header>
 );
 
-class GeneralInformation extends Component {
-
-
+class InputComponent extends Component {
   handleInputChange = (event) => {
     const target = event.target;
     const value = target.value;
@@ -23,6 +21,9 @@ class GeneralInformation extends Component {
     this.props.setResponseParent(name, value);
     this.forceUpdate();
   }
+}
+
+class GeneralInformation extends InputComponent {
 
   render() {
     console.log('rendering general information');
@@ -37,12 +38,12 @@ class GeneralInformation extends Component {
         </div>
 
         <div className="input-field col s6">
-          <input id="volunteer_email" name="volunteer_email" type="email" className="validate" required></input>
+          <input id="volunteer_email" name="volunteer_email" value={this.props.responses.volunteer_email} onChange={this.handleInputChange} type="email" className="validate" required></input>
           <label htmlFor="volunteer_email">Your email</label>
         </div>
 
         <div className="input-field col s6">
-          <input id="volunteer_phone" name="volunteer_phone" type="tel" className="validate" required></input>
+          <input id="volunteer_phone" name="volunteer_phone" value={this.props.responses.volunteer_phone} onChange={this.handleInputChange} type="tel" className="validate" required></input>
           <label htmlFor="volunteer_phone">Your phone</label>
         </div>
 
@@ -51,24 +52,30 @@ class GeneralInformation extends Component {
   }
 }
 
-const QuestionItem = (props) => (
-  <div className="input-field col s6">
-    {props.question.required && 
-      <span>
-        <input id={props.question.id} name={`q${props.question.id}`} type="text" className="validate" required></input>
-        <label htmlFor={props.question.id}>*{props.question.question_text}</label>
-      </span>
-    }
+class QuestionItem extends InputComponent {
 
-    {!props.question.required && 
-      <span>
-        <input id={props.question.id} name={`q${props.question.id}`} type="text" className="validate"></input>
-        <label htmlFor={props.question.id}>{props.question.question_text}</label>
-      </span>
-    }
-    
-  </div>
-);
+  render() {
+    return (
+      <div className="input-field col s6">
+        {this.props.question.required &&
+          <span>
+            <input id={this.props.question.id} name={`q${this.props.question.id}`} type="text" className="validate" required></input>
+            <label htmlFor={this.props.question.id}>*{this.props.question.question_text}</label>
+          </span>
+        }
+
+        {!this.props.question.required &&
+          <span>
+            <input id={this.props.question.id} name={`q${this.props.question.id}`} type="text" className="validate"></input>
+            <label htmlFor={this.props.question.id}>{this.props.question.question_text}</label>
+          </span>
+        }
+
+      </div>
+    );
+  }
+}
+
 
 const SurveyItem = (props) => (
   <div className="section">
@@ -136,7 +143,7 @@ class SurveyPage extends Component {
     console.log('pressed');
   }
 
-  
+
   setResponseParent = (name, value) => {
     console.log(`name: ${name} | value: ${value}`);
     console.log(this.props.responses);
@@ -149,7 +156,7 @@ class SurveyPage extends Component {
       <div className="container">
         <Header />
         <form onSubmit={this.submitButtonPressed}>
-          <GeneralInformation responses={this.props.responses} setResponseParent={this.setResponseParent}/>
+          <GeneralInformation responses={this.props.responses} setResponseParent={this.setResponseParent} />
           <SurveyList surveys={this.props.surveys} />
           <button className="btn waves-effect waves-light">Submit
             <i className="material-icons right">send</i>
