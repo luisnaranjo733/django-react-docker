@@ -5,6 +5,7 @@ class OpportunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Opportunity
         fields = '__all__'
+        depth = 2
 
 class SurveySerializer(serializers.ModelSerializer):
     class Meta:
