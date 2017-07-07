@@ -24,11 +24,39 @@ class OpportunityList(APIView):
     List all opportunities
     '''
 
-    # renderer_classes = (JSONRenderer, )
-
     def get(self, request, format=None):
         opportunities = Opportunity.objects.all()
         serializer = serializers.OpportunitySerializer(opportunities, many=True)
+        return DRF_Response(serializer.data)
+
+
+class SurveyList(APIView):
+    '''
+    List all surveys
+
+    Provide list of opportunity ids
+    Return a list of all surveys for those opportunities
+    '''
+
+    def get(self, request, format=None):
+        ids = request.query_params.getlist('opportunity_id')
+        if not ids:
+            response = DRF_Response(status=status.HTTP_400_BAD_REQUEST)
+            response['error'] = 'No opportunity_id query params were provided'
+            return response
+
+        opportunities = []
+        for pk in ids:
+            try:
+                opportunity = Opportunity.objects.get(pk=pk)
+                opportunities.append(opportunity)
+            except Opportunity.DoesNotExist:
+                response = DRF_Response(status=status.HTTP_404_NOT_FOUND)
+                response['error'] = 'Invalid opportunity ids provided'
+                return response
+
+        surveys = Survey.extract_surveys(opportunities)
+        serializer = serializers.SurveySerializer(surveys, many=True)
         return DRF_Response(serializer.data)
 
 
