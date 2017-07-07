@@ -9,4 +9,8 @@ class OpportunitySerializer(serializers.ModelSerializer):
 class SurveySerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
-        fields = '__all__'
+        fields = (
+            'id', 'name', 'desc',
+            'question_set'
+        )
+        depth = 1

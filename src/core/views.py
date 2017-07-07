@@ -40,20 +40,13 @@ class SurveyList(APIView):
 
     def get(self, request, format=None):
         ids = request.query_params.getlist('opportunity_id')
+        
         if not ids:
             response = DRF_Response(status=status.HTTP_400_BAD_REQUEST)
             response['error'] = 'No opportunity_id query params were provided'
             return response
 
-        opportunities = []
-        for pk in ids:
-            try:
-                opportunity = Opportunity.objects.get(pk=pk)
-                opportunities.append(opportunity)
-            except Opportunity.DoesNotExist:
-                response = DRF_Response(status=status.HTTP_404_NOT_FOUND)
-                response['error'] = 'Invalid opportunity ids provided'
-                return response
+        opportunities = Opportunity.get_opportunities(ids)
 
         surveys = Survey.extract_surveys(opportunities)
         serializer = serializers.SurveySerializer(surveys, many=True)
