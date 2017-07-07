@@ -21,13 +21,26 @@ export const setSurveys = surveys => {
     }
 }
 
+export const setResponse = (name, value) => {
+    return {
+        type: 'SET_RESPONSE',
+        name,
+        value
+    }
+}
+
 
 // reducers
 
 let initialState = {
     opportunities: [],
     opportunity_preference_ids: [],
-    surveys: []
+    surveys: [],
+    responses: {
+        volunteer_name: 'yo',
+        volunteer_email: '',
+        volunteer_phone: ''
+    }
 };
 
 const reducer = (state = initialState, action) => {
@@ -41,6 +54,9 @@ const reducer = (state = initialState, action) => {
             return new_state;
         case 'SET_SURVEYS':
             new_state.surveys = action.surveys;
+            return new_state;
+        case 'SET_RESPONSE':
+            new_state.responses[action.name] = action.value;
             return new_state;
         default:
             return state

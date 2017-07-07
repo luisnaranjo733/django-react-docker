@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { setSurveys } from '../redux'
+import { setSurveys, setResponse } from '../redux'
 
 import 'whatwg-fetch'
 import '../css/survey.css';
@@ -13,13 +13,25 @@ const Header = () => (
 );
 
 class GeneralInformation extends Component {
+
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.props.setResponseParent(name, value);
+  }
+
   render() {
+    console.log('rendering general information');
     return (
       <div>
         <h2>General information</h2>
+        <p>{this.props.responses.volunteer_name}</p>
 
         <div className="input-field col s6">
-          <input id="volunteer_name" name="volunteer_name" type="text" className="validate" required></input>
+          <input id="volunteer_name" name="volunteer_name" value={this.props.responses.volunteer_name} onChange={this.handleInputChange} type="text" className="validate" required></input>
           <label htmlFor="volunteer_name">Your name</label>
         </div>
 
@@ -91,9 +103,9 @@ class SurveyPage extends Component {
   constructor() {
     super();
     this.state = {
-      responses: {
-
-      }
+      name: '',
+      email: '',
+      phone: ''
     };
   }
 
@@ -123,13 +135,21 @@ class SurveyPage extends Component {
     console.log('pressed');
   }
 
+  
+  setResponseParent = (name, value) => {
+    console.log(`name: ${name} | value: ${value}`);
+    console.log(this.props.responses);
+    this.props.dispatch(setResponse(name, value));
+    console.log(this.props.responses);
+  }
+
   render() {
     return (
       <div className="container">
         <Header />
         <form onSubmit={this.submitButtonPressed}>
-          <GeneralInformation />
-          <SurveyList surveys={this.props.surveys} responses={this.state.responses} />
+          <GeneralInformation responses={this.props.responses} setResponseParent={this.setResponseParent}/>
+          <SurveyList surveys={this.props.surveys} />
           <button className="btn waves-effect waves-light">Submit
             <i className="material-icons right">send</i>
           </button>
@@ -143,7 +163,8 @@ function mapStateToProps(state) {
   return {
     opportunities: state.opportunities,
     opportunity_preference_ids: state.opportunity_preference_ids,
-    surveys: state.surveys
+    surveys: state.surveys,
+    responses: state.responses
   }
 }
 
