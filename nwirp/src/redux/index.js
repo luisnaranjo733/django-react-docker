@@ -41,6 +41,7 @@ const reducer = (state = initialState, action) => {
             return new_state;
         case 'SET_SURVEYS':
             new_state.surveys = action.surveys;
+            return new_state;
         default:
             return state
     }
