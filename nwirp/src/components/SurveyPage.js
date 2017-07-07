@@ -40,8 +40,20 @@ class GeneralInformation extends Component {
 
 const QuestionItem = (props) => (
   <div className="input-field col s6">
-    <input id={props.question.id} name={`q${props.question.id}`} type="text" className="validate" required></input>
-    <label htmlFor={props.question.id}>{props.question.question_text}</label>
+    {props.question.required && 
+      <span>
+        <input id={props.question.id} name={`q${props.question.id}`} type="text" className="validate" required></input>
+        <label htmlFor={props.question.id}>*{props.question.question_text}</label>
+      </span>
+    }
+
+    {!props.question.required && 
+      <span>
+        <input id={props.question.id} name={`q${props.question.id}`} type="text" className="validate"></input>
+        <label htmlFor={props.question.id}>{props.question.question_text}</label>
+      </span>
+    }
+    
   </div>
 );
 
