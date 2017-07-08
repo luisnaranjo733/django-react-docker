@@ -53,6 +53,46 @@ class SurveyList(APIView):
         return DRF_Response(serializer.data)
 
 
+class SubmitVolunteerInterestForm(APIView):
+    '''Submit a volunteer's interest form'''
+
+    renderer_classes = (JSONRenderer, )
+
+    def get(self, request):
+        return DRF_Response('hell')
+    
+    def post(self, request, format=None):
+
+        volunteer_name = request.POST.get('volunteer_name', '')
+        volunteer_email = request.POST.get('volunteer_email', '')
+        volunteer_phone = request.POST.get('volunteer_phone', '')
+
+        volunteer = Volunteer()
+        volunteer.name = volunteer_name
+        volunteer.email = volunteer_email
+        volunteer.phone = volunteer_phone
+        volunteer.save()
+
+        response = {
+            'name': volunteer_name
+        }
+
+        for key, value in request.POST.items():
+            match = re.search(r'^q(\d+)$', key)
+            if match and value:
+                match = int(match.group(1))
+                question = get_object_or_404(Question, pk=match)
+                response[key] = value
+
+                # response = Response()
+                # response.volunteer = volunteer
+                # response.question = question
+                # response.answer = value
+                # response.save()
+
+        return DRF_Response(response)
+
+
 def volunteer_listing(request):
     '''Volunteer opportunity listing page
 
