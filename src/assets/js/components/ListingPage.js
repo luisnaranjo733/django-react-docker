@@ -106,8 +106,8 @@ const ActionableOpportunity = (props) => (
 
 const SurveyableOpportunity = (props) => (
   <p>
-    <input type="checkbox" name="categories[]" value={"o"+props.opportunity.id} id={"o"+props.opportunity.id} />
-    <label htmlFor={"o"+props.opportunity.id}>{props.opportunity.name}</label>
+    <input type="checkbox" name="categories[]" value={"o" + props.opportunity.id} id={"o" + props.opportunity.id} />
+    <label htmlFor={"o" + props.opportunity.id}>{props.opportunity.name}</label>
   </p>
 );
 
@@ -140,9 +140,9 @@ class OpportunityInterestList extends Component {
 class ListingPage extends Component {
   constructor() {
     super();
-      this.state = {
-        opportunities: []
-      }
+    this.state = {
+      opportunities: []
+    }
   }
 
   componentDidMount() {
