@@ -63,6 +63,13 @@ class SubmitVolunteerInterestForm(APIView):
     
     def post(self, request, format=None):
 
+        json = {
+            'number_responses_saved': 0,
+            'responses_saved': [],
+            'volunteer': {},
+            'opportunities': []
+        }
+
         volunteer_name = request.POST.get('volunteer_name', '')
         volunteer_email = request.POST.get('volunteer_email', '')
         volunteer_phone = request.POST.get('volunteer_phone', '')
@@ -73,10 +80,13 @@ class SubmitVolunteerInterestForm(APIView):
         volunteer.phone = volunteer_phone
         volunteer.save()
 
+        serialized_volunteer = serializers.VolunteerSerializer(volunteer)
+        json['volunteer'] = serialized_volunteer.data
+
         opportunity_preference_ids = request.POST.getlist('opportunity_preference_id')
 
         question_responses = {
-
+            'opportunity_preference_ids': opportunity_preference_ids
         }
 
         for key, value in request.POST.items():
@@ -90,18 +100,29 @@ class SubmitVolunteerInterestForm(APIView):
                     continue
 
         for opportunity in Opportunity.get_opportunities(opportunity_preference_ids):
+            opportunity.volunteers.add(volunteer)
+            opportunity.save()
+            serialized_opportunity = serializers.ShallowOpportunitySerializer(opportunity)
+            json['opportunities'].append(serialized_opportunity.data)
             for survey in opportunity.surveys.all():
                 for question in survey.question_set.all():
                     key = 'q%d' % question.id
-                    if key in question_responses:
+                    question_exists = QuestionResponse.objects.filter(
+                        volunteer=volunteer, question=question
+                    ).exists()
+                    if key in question_responses and not question_exists:
 
                         response = QuestionResponse()
                         response.volunteer = volunteer
                         response.question = question
-                        response.answer = value
+                        response.answer = question_responses[key]
                         response.save()
 
-        return DRF_Response(question_responses)
+                        json['number_responses_saved'] += 1
+                        serialized_question_response = serializers.QuestionResponseSerializer(response)
+                        json['responses_saved'].append(serialized_question_response.data)
+
+        return DRF_Response(json)
 
 
 def volunteer_listing(request):
