@@ -151,23 +151,29 @@ class SurveyPage extends Component {
 
   submitButtonPressed = (e) => {
     e.preventDefault();
-    url = 'http://localhost/api/submit/?format=json';
+    let url = 'http://localhost/api/submit/?format=json';
 
     let data = new FormData();
 
     // General volunteer information
-    data.append('volunteer_name', this.props.responses.volunteer_name)
-    data.append('volunteer_email', this.props.responses.volunteer_email)
-    data.append('volunteer_phone', this.props.responses.volunteer_phone)
+    data.append('volunteer_name', this.props.general_information.volunteer_name)
+    data.append('volunteer_email', this.props.general_information.volunteer_email)
+    data.append('volunteer_phone', this.props.general_information.volunteer_phone)
 
+    // list of opportunity preference ids
     this.props.opportunity_preference_ids.forEach(id => {
       data.append('opportunity_preference_id', id);
     });
 
-    // q1 = answer
-    // q2 = answer
-    data.append('x', 'y');
+    // question id (key) and response (value) pairs
+    for (const key of Object.keys(this.props.responses)) {
+      data.append(key, this.props.responses[key]);
+    }
 
+    
+    for (let entry of data.entries()) {
+      console.log(entry);
+    }
     postRequest(url, data);
   }
 
