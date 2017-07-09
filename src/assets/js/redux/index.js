@@ -29,6 +29,14 @@ export const setResponse = (name, value) => {
     }
 }
 
+export const setGeneralInformation = (name, value) => {
+    return {
+        type: 'SET_GENERAL_INFORMATION',
+        name,
+        value
+    }
+}
+
 
 // reducers
 
@@ -36,7 +44,8 @@ let initialState = {
     opportunities: [],
     opportunity_preference_ids: [],
     surveys: [],
-    responses: {
+    responses: {},
+    general_information: {
         volunteer_name: '',
         volunteer_email: '',
         volunteer_phone: ''
@@ -57,6 +66,9 @@ const reducer = (state = initialState, action) => {
             return new_state;
         case 'SET_RESPONSE':
             new_state.responses[action.name] = action.value;
+            return new_state;
+        case 'SET_GENERAL_INFORMATION':
+            new_state.general_information[action.name] = action.value;
             return new_state;
         default:
             return state

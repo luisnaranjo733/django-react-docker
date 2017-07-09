@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { setSurveys, setResponse } from '../redux'
+import { setSurveys, setResponse, setGeneralInformation } from '../redux'
 import { postRequest } from '../utils'
 
 import 'whatwg-fetch'
@@ -13,37 +13,36 @@ const Header = () => (
   </header>
 );
 
-class InputComponent extends Component {
+
+class GeneralInformation extends Component {
+
   handleInputChange = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
 
-    this.props.setResponseParent(name, value);
+    this.props.setGeneralInformation(name, value);
     this.forceUpdate();
   }
-}
-
-class GeneralInformation extends InputComponent {
 
   render() {
     return (
       <div>
         <h2>General information</h2>
-        <p>{this.props.responses.volunteer_name}</p>
+        <p>{this.props.general_information.volunteer_name}</p>
 
         <div className="input-field col s6">
-          <input id="volunteer_name" name="volunteer_name" value={this.props.responses.volunteer_name} onChange={this.handleInputChange} type="text" className="validate" required></input>
+          <input id="volunteer_name" name="volunteer_name" value={this.props.general_information.volunteer_name} onChange={this.handleInputChange} type="text" className="validate" required></input>
           <label htmlFor="volunteer_name">Your name</label>
         </div>
 
         <div className="input-field col s6">
-          <input id="volunteer_email" name="volunteer_email" value={this.props.responses.volunteer_email} onChange={this.handleInputChange} type="email" className="validate" required></input>
+          <input id="volunteer_email" name="volunteer_email" value={this.props.general_information.volunteer_email} onChange={this.handleInputChange} type="email" className="validate" required></input>
           <label htmlFor="volunteer_email">Your email</label>
         </div>
 
         <div className="input-field col s6">
-          <input id="volunteer_phone" name="volunteer_phone" value={this.props.responses.volunteer_phone} onChange={this.handleInputChange} type="tel" className="validate" required></input>
+          <input id="volunteer_phone" name="volunteer_phone" value={this.props.general_information.volunteer_phone} onChange={this.handleInputChange} type="tel" className="validate" required></input>
           <label htmlFor="volunteer_phone">Your phone</label>
         </div>
 
@@ -52,7 +51,16 @@ class GeneralInformation extends InputComponent {
   }
 }
 
-class QuestionItem extends InputComponent {
+class QuestionItem extends Component {
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.props.setResponseParent(name, value);
+    this.forceUpdate();
+  }
 
   render() {
     let question_id = `q${this.props.question.id}`;
@@ -163,6 +171,9 @@ class SurveyPage extends Component {
     postRequest(url, data);
   }
 
+  setGeneralInformation = (name, value) => {
+    this.props.dispatch(setGeneralInformation(name, value));
+  }
 
   setResponseParent = (name, value) => {
     this.props.dispatch(setResponse(name, value));
@@ -173,7 +184,7 @@ class SurveyPage extends Component {
       <div className="container">
         <Header />
         <form onSubmit={this.submitButtonPressed}>
-          <GeneralInformation responses={this.props.responses} setResponseParent={this.setResponseParent} />
+          <GeneralInformation general_information={this.props.general_information} setGeneralInformation={this.setGeneralInformation} />
           <SurveyList responses={this.props.responses} setResponseParent={this.setResponseParent} surveys={this.props.surveys} />
           <button className="btn waves-effect waves-light">Submit
             <i className="material-icons right">send</i>
@@ -189,7 +200,8 @@ function mapStateToProps(state) {
     opportunities: state.opportunities,
     opportunity_preference_ids: state.opportunity_preference_ids,
     surveys: state.surveys,
-    responses: state.responses
+    responses: state.responses,
+    general_information: state.general_information
   }
 }
 
