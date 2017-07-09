@@ -48,7 +48,7 @@ let OPPORTUNITIES = [
 
 const Header = () => (
   <header>
-    <h1>Volunteer opportunities</h1>
+    <h1>Volunteer opportunities!</h1>
 
     <div className="divider"></div>
 

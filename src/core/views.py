@@ -73,16 +73,35 @@ class SubmitVolunteerInterestForm(APIView):
         volunteer.phone = volunteer_phone
         volunteer.save()
 
+        opportunity_preference_ids = request.POST.getlist('opportunity_preference_id')
+
         response = {
-            'name': volunteer_name
+
+        }
+
+        question_responses = {
+
         }
 
         for key, value in request.POST.items():
             match = re.search(r'^q(\d+)$', key)
             if match and value:
                 match = int(match.group(1))
-                question = get_object_or_404(Question, pk=match)
-                response[key] = value
+                try:
+                    question = Question.objects.get(pk=match)
+                    question_responses[key] = value
+
+                    # response[key] = value
+                except Question.DoesNotExist:
+                    continue
+
+        for opportunity in Opportunity.get_opportunities(opportunity_preference_ids):
+            for survey in opportunity.surveys.all():
+                for question in survey.question_set.all():
+                    key = 'q%d' % question.id
+                    if key in question_responses:
+                        response[key] = 'found'
+                
 
                 # response = Response()
                 # response.volunteer = volunteer
