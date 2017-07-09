@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { setSurveys, setResponse, setGeneralInformation } from '../redux'
+import { setSurveys, setResponse, setGeneralInformation, setRegisteredVolunteer } from '../redux'
 import { postRequest } from '../utils'
 
 import 'whatwg-fetch'
@@ -174,7 +174,12 @@ class SurveyPage extends Component {
     for (let entry of data.entries()) {
       console.log(entry);
     }
-    postRequest(url, data);
+    postRequest(url, data, response => {
+      console.log('its liit');
+      console.log(response);
+      this.props.dispatch(setRegisteredVolunteer(response.volunteer));
+      this.props.history.push('/Done');
+    });
   }
 
   setGeneralInformation = (name, value) => {
@@ -207,7 +212,8 @@ function mapStateToProps(state) {
     opportunity_preference_ids: state.opportunity_preference_ids,
     surveys: state.surveys,
     responses: state.responses,
-    general_information: state.general_information
+    general_information: state.general_information,
+    registered_volunteer: state.registered_volunteer
   }
 }
 

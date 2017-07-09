@@ -37,6 +37,13 @@ export const setGeneralInformation = (name, value) => {
     }
 }
 
+export const setRegisteredVolunteer = registered_volunteer => {
+    return {
+        type: 'SET_REGISTERED_VOLUNTEER',
+        registered_volunteer
+    }
+}
+
 
 // reducers
 
@@ -46,10 +53,11 @@ let initialState = {
     surveys: [],
     responses: {},
     general_information: {
-        volunteer_name: '',
-        volunteer_email: '',
-        volunteer_phone: ''
-    }
+        volunteer_name: 'Luis Naranjo',
+        volunteer_email: 'luisnaranjo733@gmail.com',
+        volunteer_phone: '206-478-4652'
+    },
+    registered_volunteer: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -69,6 +77,9 @@ const reducer = (state = initialState, action) => {
             return new_state;
         case 'SET_GENERAL_INFORMATION':
             new_state.general_information[action.name] = action.value;
+            return new_state;
+        case 'SET_REGISTERED_VOLUNTEER':
+            new_state.registered_volunteer = action.registered_volunteer
             return new_state;
         default:
             return state

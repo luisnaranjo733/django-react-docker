@@ -1,6 +1,9 @@
 import * as Cookies from "js-cookie";
 
-export function postRequest(url, data) {
+let default_success = data => console.log(data);
+let default_failure = ex => console.log('exception:', ex);
+
+export function postRequest(url, data, success=default_success, failure=default_failure) {
     let csrf_token = Cookies.get('csrftoken');
     fetch(url, {
         method: "POST",
@@ -11,9 +14,6 @@ export function postRequest(url, data) {
         body: data
     }).then(function(response) {
         return response.json();
-    }).then(function(data) {
-        console.log(data); 
-    }).catch(function(ex) {
-        console.log("parsing failed", ex);
-    });
+    }).then(success)
+    .catch(failure);
 }

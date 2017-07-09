@@ -26,6 +26,7 @@ const App = () => (
       <div>
         <Route exact path="/" component={ListingPage} />
         <Route path="/Survey" component={SurveyPage} />
+        <Route path="/Done" component={ConfirmationPage} />
       </div>
     </Router>
   </Provider>
