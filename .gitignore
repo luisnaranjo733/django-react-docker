@@ -8,4 +8,5 @@ log.txt
 *.pem
 src/node_modules/
 src/assets/bundles/*
+src/webpack-stats.json
 npm-debug.log

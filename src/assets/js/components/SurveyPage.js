@@ -122,9 +122,10 @@ class SurveyPage extends Component {
     // fetch opportunities from backend via api
     let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/api/surveys/?format=json';
     url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/api/surveys/?format=json&opportunity_id=9&opportunity_id=4';
-    // this.props.opportunity_preference_ids.forEach(id => {
-    //   url += `&opportunity_id=${id}`;
-    // });
+    url = 'http://localhost/api/surveys/?format=json';
+    this.props.opportunity_preference_ids.forEach(id => {
+      url += `&opportunity_id=${id}`;
+    });
 
     let outerThis = this;
     fetch(url)
