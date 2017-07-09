@@ -8,7 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response as DRF_Response
 from rest_framework.views import APIView
 
-from core.models import (Manager, Opportunity, Question, Response, Survey,
+from core.models import (Manager, Opportunity, Question, QuestionResponse, Survey,
                          Volunteer)
 from core import serializers
 
@@ -75,10 +75,6 @@ class SubmitVolunteerInterestForm(APIView):
 
         opportunity_preference_ids = request.POST.getlist('opportunity_preference_id')
 
-        response = {
-
-        }
-
         question_responses = {
 
         }
@@ -90,8 +86,6 @@ class SubmitVolunteerInterestForm(APIView):
                 try:
                     question = Question.objects.get(pk=match)
                     question_responses[key] = value
-
-                    # response[key] = value
                 except Question.DoesNotExist:
                     continue
 
@@ -100,16 +94,14 @@ class SubmitVolunteerInterestForm(APIView):
                 for question in survey.question_set.all():
                     key = 'q%d' % question.id
                     if key in question_responses:
-                        response[key] = 'found'
-                
 
-                # response = Response()
-                # response.volunteer = volunteer
-                # response.question = question
-                # response.answer = value
-                # response.save()
+                        response = QuestionResponse()
+                        response.volunteer = volunteer
+                        response.question = question
+                        response.answer = value
+                        response.save()
 
-        return DRF_Response(response)
+        return DRF_Response(question_responses)
 
 
 def volunteer_listing(request):

@@ -138,7 +138,7 @@ class Opportunity(models.Model):
 
         return opportunities
 
-class Response(models.Model):
+class QuestionResponse(models.Model):
     '''Model for registering a volunteer for a particular opportunity's particular question
     '''
 
