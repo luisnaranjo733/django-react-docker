@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { setSurveys, setResponse } from '../redux'
+import { postRequest } from '../utils'
 
 import 'whatwg-fetch'
 import '../css/survey.css';
@@ -142,6 +143,24 @@ class SurveyPage extends Component {
 
   submitButtonPressed = (e) => {
     e.preventDefault();
+    url = 'http://localhost/api/submit/?format=json';
+
+    let data = new FormData();
+
+    // General volunteer information
+    data.append('volunteer_name', this.props.responses.volunteer_name)
+    data.append('volunteer_email', this.props.responses.volunteer_email)
+    data.append('volunteer_phone', this.props.responses.volunteer_phone)
+
+    this.props.opportunity_preference_ids.forEach(id => {
+      data.append('opportunity_preference_id', id);
+    });
+
+    // q1 = answer
+    // q2 = answer
+    data.append('x', 'y');
+
+    postRequest(url, data);
   }
 
 
