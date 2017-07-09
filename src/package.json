@@ -25,12 +25,15 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^0.28.4",
     "install": "^0.10.1",
+    "js-cookie": "^2.1.4",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "redux": "^3.7.1",
     "style-loader": "^0.18.2"
   },
   "babel": {
-    "plugins": ["transform-class-properties"]
+    "plugins": [
+      "transform-class-properties"
+    ]
   }
 }
