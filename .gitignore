@@ -10,3 +10,4 @@ src/node_modules/
 src/assets/bundles/*
 src/webpack-stats.json
 npm-debug.log
+.vscode/.ropeproject/objectdb
