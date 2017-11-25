@@ -53,9 +53,9 @@ let initialState = {
     surveys: [],
     responses: {},
     general_information: {
-        volunteer_name: 'Luis Naranjo',
-        volunteer_email: 'luisnaranjo733@gmail.com',
-        volunteer_phone: '206-478-4652'
+        volunteer_name: '',
+        volunteer_email: '',
+        volunteer_phone: ''
     },
     registered_volunteer: {}
 };
