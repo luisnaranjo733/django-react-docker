@@ -1,5 +1,6 @@
 *.pyc
 venv
+env
 *.vsd
 *.sqlite3
 log.txt

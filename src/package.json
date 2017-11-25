@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "node ./node_modules/webpack/bin/webpack.js --config webpack.config.js",
-    "nginx": "docker exec -ti nginx bash"
+    "nginx": "docker exec -ti nginx bash",
+    "web": "docker exec -ti web bash"
   },
   "author": "",
   "license": "ISC",
