@@ -57,9 +57,6 @@ class SubmitVolunteerInterestForm(APIView):
 
     renderer_classes = (JSONRenderer, )
 
-    def get(self, request):
-        return DRF_Response('hell')
-    
     def post(self, request, format=None):
 
         json = {

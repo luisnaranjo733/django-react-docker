@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { setSurveys, setResponse, setGeneralInformation, setRegisteredVolunteer } from '../redux'
-import { postRequest } from '../utils'
+import { getSurveyEndpoint, getSubmissionEndpoint, postRequest } from '../utils'
 
 import 'whatwg-fetch'
 import '../css/survey.css';
@@ -109,7 +109,7 @@ class SurveyList extends Component {
       <div>
         <h2>Volunteer Surveys</h2>
         {this.props.surveys.map((survey, index) => (
-          <SurveyItem key={index} survey={survey} responses={this.props.responses} setResponseParent={this.props.setResponseParent}/>
+          <SurveyItem key={index} survey={survey} responses={this.props.responses} setResponseParent={this.props.setResponseParent} />
         ))}
       </div>
     );
@@ -129,12 +129,7 @@ class SurveyPage extends Component {
 
   componentDidMount() {
     // fetch opportunities from backend via api
-    let url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/api/surveys/?format=json';
-    url = 'http://ec2-54-218-9-42.us-west-2.compute.amazonaws.com/api/surveys/?format=json&opportunity_id=9&opportunity_id=4';
-    url = 'http://localhost/api/surveys/?format=json';
-    this.props.opportunity_preference_ids.forEach(id => {
-      url += `&opportunity_id=${id}`;
-    });
+    let url = getSurveyEndpoint(this.props.opportunity_preference_ids);
 
     let outerThis = this;
     fetch(url)
@@ -151,7 +146,6 @@ class SurveyPage extends Component {
 
   submitButtonPressed = (e) => {
     e.preventDefault();
-    let url = 'http://localhost/api/submit/?format=json';
 
     let data = new FormData();
 
@@ -170,11 +164,11 @@ class SurveyPage extends Component {
       data.append(key, this.props.responses[key]);
     }
 
-    
+
     for (let entry of data.entries()) {
       console.log(entry);
     }
-    postRequest(url, data, response => {
+    postRequest(getSubmissionEndpoint(), data, response => {
       console.log('its liit');
       console.log(response);
       this.props.dispatch(setRegisteredVolunteer(response.volunteer));
